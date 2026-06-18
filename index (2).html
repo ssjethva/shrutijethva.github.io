@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Shruti Jethva — Biomedical Engineer</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --navy: #0f172a;
+      --card: #1e293b;
+      --card-border: #2d3f57;
+      --white: #f8fafc;
+      --muted: #94a3b8;
+      --accent: #38bdf8;
+      --accent-dim: rgba(56,189,248,0.12);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--navy);
+      color: var(--white);
+      font-family: 'Inter', sans-serif;
+      font-size: 16px;
+      line-height: 1.7;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0;
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 1rem 2.5rem;
+      background: rgba(15,23,42,0.85);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--card-border);
+      z-index: 100;
+    }
+    .nav-logo {
+      font-family: 'DM Serif Display', serif;
+      font-size: 1.2rem;
+      color: var(--accent);
+      letter-spacing: 0.02em;
+    }
+    .nav-links { display: flex; gap: 2rem; list-style: none; }
+    .nav-links a {
+      color: var(--muted); text-decoration: none;
+      font-size: 0.85rem; font-weight: 500; letter-spacing: 0.05em;
+      text-transform: uppercase; transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--accent); }
+
+    /* ── HERO ── */
+    #hero {
+      min-height: 100vh;
+      display: flex; flex-direction: column;
+      justify-content: center; align-items: flex-start;
+      padding: 8rem 2.5rem 4rem;
+      max-width: 900px; margin: 0 auto;
+      position: relative;
+    }
+    .hero-eyebrow {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.78rem; color: var(--accent);
+      letter-spacing: 0.12em; text-transform: uppercase;
+      margin-bottom: 1.2rem;
+    }
+    h1 {
+      font-family: 'DM Serif Display', serif;
+      font-size: clamp(2.8rem, 6vw, 4.5rem);
+      line-height: 1.1; color: var(--white);
+      margin-bottom: 1rem;
+    }
+    h1 span { color: var(--accent); }
+    .hero-sub {
+      font-size: 1.1rem; color: var(--muted);
+      max-width: 540px; margin-bottom: 2rem;
+    }
+    .hero-cta {
+      display: flex; gap: 1rem; flex-wrap: wrap;
+    }
+    .btn {
+      display: inline-block; padding: 0.7rem 1.6rem;
+      border-radius: 6px; font-size: 0.9rem; font-weight: 600;
+      text-decoration: none; transition: all 0.2s; cursor: pointer;
+    }
+    .btn-primary {
+      background: var(--accent); color: var(--navy);
+    }
+    .btn-primary:hover { background: #7dd3fc; }
+    .btn-outline {
+      border: 1px solid var(--card-border); color: var(--white);
+    }
+    .btn-outline:hover { border-color: var(--accent); color: var(--accent); }
+
+    /* ECG canvas */
+    #ecg-canvas {
+      position: absolute; bottom: 3rem; left: 0; right: 0;
+      width: 100%; height: 80px; opacity: 0.35;
+    }
+
+    /* ── SECTIONS ── */
+    section {
+      max-width: 900px; margin: 0 auto;
+      padding: 5rem 2.5rem;
+    }
+    .section-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.75rem; color: var(--accent);
+      letter-spacing: 0.14em; text-transform: uppercase;
+      margin-bottom: 0.6rem;
+    }
+    h2 {
+      font-family: 'DM Serif Display', serif;
+      font-size: 2rem; color: var(--white);
+      margin-bottom: 2rem;
+    }
+
+    /* ── ABOUT ── */
+    .about-grid {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 2rem; align-items: start;
+    }
+    .about-text { color: var(--muted); font-size: 0.98rem; }
+    .about-text p { margin-bottom: 1rem; }
+    .about-text strong { color: var(--white); }
+    .skills-list {
+      background: var(--card);
+      border: 1px solid var(--card-border);
+      border-radius: 10px; padding: 1.5rem;
+    }
+    .skill-row { margin-bottom: 1rem; }
+    .skill-row:last-child { margin-bottom: 0; }
+    .skill-category {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.7rem; color: var(--accent);
+      letter-spacing: 0.1em; text-transform: uppercase;
+      margin-bottom: 0.35rem;
+    }
+    .skill-tags { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+    .tag {
+      background: var(--accent-dim); color: var(--accent);
+      border: 1px solid rgba(56,189,248,0.25);
+      border-radius: 4px; padding: 0.2rem 0.6rem;
+      font-size: 0.78rem; font-weight: 500;
+    }
+
+    /* ── PROJECTS ── */
+    .projects-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 1.5rem;
+    }
+    .project-card {
+      background: var(--card);
+      border: 1px solid var(--card-border);
+      border-radius: 12px; padding: 1.6rem;
+      transition: border-color 0.2s, transform 0.2s;
+    }
+    .project-card:hover {
+      border-color: var(--accent);
+      transform: translateY(-3px);
+    }
+    .project-icon {
+      font-size: 1.6rem; margin-bottom: 1rem;
+    }
+    .project-card h3 {
+      font-family: 'DM Serif Display', serif;
+      font-size: 1.1rem; color: var(--white);
+      margin-bottom: 0.5rem;
+    }
+    .project-card p {
+      font-size: 0.88rem; color: var(--muted);
+      margin-bottom: 1rem; line-height: 1.6;
+    }
+    .project-stat {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.75rem; color: var(--accent);
+      background: var(--accent-dim);
+      border-radius: 4px; padding: 0.25rem 0.6rem;
+      display: inline-block; margin-bottom: 0.4rem;
+    }
+    .project-techs { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-top: 1rem; }
+    .project-tech {
+      font-size: 0.72rem; color: var(--muted);
+      border: 1px solid var(--card-border);
+      border-radius: 4px; padding: 0.15rem 0.5rem;
+    }
+
+    /* ── EXPERIENCE ── */
+    .exp-item {
+      border-left: 2px solid var(--card-border);
+      padding-left: 1.5rem; margin-bottom: 2.5rem;
+      position: relative;
+    }
+    .exp-item::before {
+      content: '';
+      position: absolute; left: -5px; top: 6px;
+      width: 8px; height: 8px;
+      background: var(--accent); border-radius: 50%;
+    }
+    .exp-role {
+      font-weight: 600; font-size: 1rem;
+      color: var(--white); margin-bottom: 0.2rem;
+    }
+    .exp-org {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.78rem; color: var(--accent);
+      margin-bottom: 0.6rem;
+    }
+    .exp-bullets { list-style: none; }
+    .exp-bullets li {
+      font-size: 0.9rem; color: var(--muted);
+      margin-bottom: 0.4rem; padding-left: 1rem;
+      position: relative;
+    }
+    .exp-bullets li::before {
+      content: '→'; position: absolute; left: 0;
+      color: var(--accent); font-size: 0.8rem;
+    }
+
+    /* ── CONTACT ── */
+    #contact { text-align: center; }
+    #contact h2 { margin-bottom: 0.5rem; }
+    #contact p { color: var(--muted); margin-bottom: 2rem; }
+    .contact-links {
+      display: flex; justify-content: center; gap: 1rem; flex-wrap: wrap;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      text-align: center; padding: 2rem;
+      color: var(--muted); font-size: 0.8rem;
+      border-top: 1px solid var(--card-border);
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 640px) {
+      nav { padding: 1rem 1.2rem; }
+      .nav-links { gap: 1rem; }
+      section { padding: 4rem 1.2rem; }
+      #hero { padding: 7rem 1.2rem 4rem; }
+      .about-grid { grid-template-columns: 1fr; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      #ecg-canvas { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <div class="nav-logo">SJ</div>
+    <ul class="nav-links">
+      <li><a href="#about">About</a></li>
+      <li><a href="#projects">Projects</a></li>
+      <li><a href="#experience">Experience</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </nav>
+
+  <!-- HERO -->
+  <div id="hero">
+    <p class="hero-eyebrow">Biomedical Engineering · NJIT · Class of 2027</p>
+    <h1>Hi, I'm <span>Shruti Jethva.</span></h1>
+    <p class="hero-sub">
+      I build things at the intersection of medicine, hardware, and data — from Arduino dialysis sensors to machine learning models for gait disorder classification.
+    </p>
+    <div class="hero-cta">
+      <a href="#projects" class="btn btn-primary">View My Work</a>
+      <a href="Shruti_Jethva_Resume.pdf" class="btn btn-outline" target="_blank">Download Resume</a>
+    </div>
+    <canvas id="ecg-canvas"></canvas>
+  </div>
+
+  <!-- ABOUT -->
+  <section id="about">
+    <p class="section-label">Background</p>
+    <h2>About Me</h2>
+    <div class="about-grid">
+      <div class="about-text">
+        <p>
+          I'm a <strong>junior Biomedical Engineering student at NJIT</strong> with a hands-on background in medical device prototyping, machine learning for clinical applications, and 3+ years working as a licensed pharmacy technician at a specialty private pharmacy.
+        </p>
+        <p>
+          My work spans the full stack of biomedical engineering — from soldering circuits and programming microcontrollers to building ML pipelines on clinical biomechanics datasets.
+        </p>
+        <p>
+          I hold a <strong>New Jersey State Pharmacy Technician License</strong> and bring real-world healthcare experience that grounds my engineering work in patient impact.
+        </p>
+      </div>
+      <div class="skills-list">
+        <div class="skill-row">
+          <div class="skill-category">Programming</div>
+          <div class="skill-tags">
+            <span class="tag">Python</span>
+            <span class="tag">MATLAB</span>
+            <span class="tag">C++</span>
+          </div>
+        </div>
+        <div class="skill-row">
+          <div class="skill-category">Hardware</div>
+          <div class="skill-tags">
+            <span class="tag">Arduino</span>
+            <span class="tag">ESP32</span>
+            <span class="tag">Biopac MP36</span>
+            <span class="tag">Soldering</span>
+          </div>
+        </div>
+        <div class="skill-row">
+          <div class="skill-category">Software</div>
+          <div class="skill-tags">
+            <span class="tag">SolidWorks</span>
+            <span class="tag">AcqKnowledge</span>
+            <span class="tag">scikit-learn</span>
+          </div>
+        </div>
+        <div class="skill-row">
+          <div class="skill-category">Fabrication</div>
+          <div class="skill-tags">
+            <span class="tag">3D Printing</span>
+            <span class="tag">Laser Cutting</span>
+          </div>
+        </div>
+        <div class="skill-row">
+          <div class="skill-category">Licensure</div>
+          <div class="skill-tags">
+            <span class="tag">NJ Pharmacy Tech License</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROJECTS -->
+  <section id="projects">
+    <p class="section-label">Work</p>
+    <h2>Projects</h2>
+    <div class="projects-grid">
+
+      <div class="project-card">
+        <div class="project-icon">🧪</div>
+        <h3>Arduino Dialysis Monitoring System</h3>
+        <p>Designed and built a functional dialysis simulation device using a TDS sensor, DC motor pump, and LCD display to monitor solute concentration in real time.</p>
+        <div>
+          <span class="project-stat">Working prototype</span>
+          <span class="project-stat">3D printed + laser cut</span>
+        </div>
+        <div class="project-techs">
+          <span class="project-tech">Arduino</span>
+          <span class="project-tech">C++</span>
+          <span class="project-tech">TDS sensor</span>
+          <span class="project-tech">3D printing</span>
+        </div>
+      </div>
+
+      <div class="project-card">
+        <div class="project-icon">🦿</div>
+        <h3>ML Gait Disorder Classification</h3>
+        <p>Built ML classifiers on 8,000 walking trials from the GaitRec database to classify lower-limb pathology and predict bilateral gait symmetry index.</p>
+        <div>
+          <span class="project-stat">62.8% accuracy (2.5× baseline)</span>
+          <span class="project-stat">R² = 0.909</span>
+        </div>
+        <div class="project-techs">
+          <span class="project-tech">Python</span>
+          <span class="project-tech">scikit-learn</span>
+          <span class="project-tech">SVM</span>
+          <span class="project-tech">Gradient Boosting</span>
+        </div>
+      </div>
+
+      <div class="project-card">
+        <div class="project-icon">💪</div>
+        <h3>EMG-Controlled Tank Robot</h3>
+        <p>Assembled a wireless muscle-controlled robot reading EMG signals through an LM324 analog conditioning circuit, transmitted via ESP-NOW to drive DC motors.</p>
+        <div>
+          <span class="project-stat">Full signal chain built</span>
+          <span class="project-stat">Wireless ESP-NOW link</span>
+        </div>
+        <div class="project-techs">
+          <span class="project-tech">ESP32</span>
+          <span class="project-tech">Biopac MP36</span>
+          <span class="project-tech">LM324</span>
+          <span class="project-tech">Soldering</span>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- EXPERIENCE -->
+  <section id="experience">
+    <p class="section-label">Experience</p>
+    <h2>Background</h2>
+
+    <div class="exp-item">
+      <div class="exp-role">Pharmacy Technician (Part-Time)</div>
+      <div class="exp-org">RVL Pharmacy · 2023 – Present · NJ State Licensed</div>
+      <ul class="exp-bullets">
+        <li>Processed and dispensed 100+ specialty prescriptions daily at a private cash-pay pharmacy</li>
+        <li>Guided patients through insurance reimbursement processes, improving medication accessibility</li>
+        <li>Handled compounding and specialty drug preparation under pharmaceutical safety standards</li>
+        <li>Managed inventory and controlled substance records across an active specialty formulary</li>
+      </ul>
+    </div>
+
+    <div class="exp-item">
+      <div class="exp-role">Undergraduate Research Assistant</div>
+      <div class="exp-org">Biomechanics Research Lab, NJIT · Spring 2025</div>
+      <ul class="exp-bullets">
+        <li>Contributed to lab meetings and experimental setup in a biomechanics research environment</li>
+        <li>Assisted with Biopac hardware configuration and equipment setup for data collection</li>
+      </ul>
+    </div>
+
+    <div class="exp-item">
+      <div class="exp-role">B.S. Biomedical Engineering</div>
+      <div class="exp-org">New Jersey Institute of Technology · Expected May 2027</div>
+      <ul class="exp-bullets">
+        <li>Relevant coursework: Biomechanics, Human Physiology, Biomedical Instrumentation, Circuits, Engineering Design</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact">
+    <p class="section-label">Get In Touch</p>
+    <h2>Let's Connect</h2>
+    <p>I'm actively looking for Summer 2026 biomedical engineering internships.<br>Open to medical devices, biotech, pharma, and clinical engineering roles.</p>
+    <div class="contact-links">
+      <a href="mailto:shruti.jethva@njit.edu" class="btn btn-primary">Email Me</a>
+      <a href="https://linkedin.com/in/shrutijethva" class="btn btn-outline" target="_blank">LinkedIn</a>
+      <a href="https://github.com/shrutijethva" class="btn btn-outline" target="_blank">GitHub</a>
+      <a href="Shruti_Jethva_Resume.pdf" class="btn btn-outline" target="_blank">Resume PDF</a>
+    </div>
+  </section>
+
+  <footer>
+    Built by Shruti Jethva · NJIT Biomedical Engineering · 2026
+  </footer>
+
+  <!-- ECG ANIMATION -->
+  <script>
+    const canvas = document.getElementById('ecg-canvas');
+    const ctx = canvas.getContext('2d');
+    let W, H, offset = 0;
+
+    function resize() {
+      W = canvas.width = canvas.offsetWidth;
+      H = canvas.height = canvas.offsetHeight;
+    }
+    resize();
+    window.addEventListener('resize', resize);
+
+    // ECG waveform path (normalized 0–1 for one beat)
+    function ecgY(t) {
+      t = t % 1;
+      if (t < 0.1) return 0.5;
+      if (t < 0.14) return 0.5 - (t - 0.1) / 0.04 * 0.08;
+      if (t < 0.18) return 0.42 + (t - 0.14) / 0.04 * 0.08;
+      if (t < 0.22) return 0.5 - (t - 0.18) / 0.04 * 0.45;
+      if (t < 0.26) return 0.05 + (t - 0.22) / 0.04 * 0.65;
+      if (t < 0.30) return 0.7 - (t - 0.26) / 0.04 * 0.25;
+      if (t < 0.34) return 0.45 + (t - 0.30) / 0.04 * 0.05;
+      if (t < 0.50) return 0.5;
+      if (t < 0.56) return 0.5 - Math.sin((t - 0.50) / 0.06 * Math.PI) * 0.12;
+      return 0.5;
+    }
+
+    function draw() {
+      ctx.clearRect(0, 0, W, H);
+      ctx.strokeStyle = '#38bdf8';
+      ctx.lineWidth = 1.5;
+      ctx.beginPath();
+      const speed = 0.4;
+      const repeat = 3;
+      for (let x = 0; x < W; x++) {
+        const t = ((x / W) * repeat + offset) % 1;
+        const y = ecgY(t) * H;
+        x === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+      }
+      ctx.stroke();
+      offset = (offset + speed / W) % 1;
+      requestAnimationFrame(draw);
+    }
+    draw();
+  </script>
+
+</body>
+</html>
